@@ -4,31 +4,30 @@
 
 {% block body %}
     <h1>ClassRoom</h1>
-
     <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ class_room.id }}</td>
+                <td>{{ class.id }}</td>
             </tr>
             <tr>
                 <th>Class</th>
-                <td>{{ class_room.class }}</td>
+                <td>{{ class.class }}</td>
             </tr>
             <tr>
                 <th>Created</th>
-                <td>{{ class_room.created ? class_room.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ class.created ? class.created|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
                 <th>Active</th>
-                <td>{{ class_room.active ? 'Yes' : 'No' }}</td>
+                <td>{{ class.active ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('class_room_index') }}">back to list</a>
 
-    <a href="{{ path('class_room_edit', {'id': class_room.id}) }}">edit</a>
+    <a href="{{ path('class_room_edit', {'id': class.id}) }}">edit</a>
+    <a href="{{ path('class_room_delete', {'id': class.id}) }}">DELETE</a>
 
-    {{ include('class_room/_delete_form.html.twig') }}
 {% endblock %}

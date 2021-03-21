@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass=ClassRoomRepository::class)
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get"}
+ *     itemOperations={"get", "patch", "delete"}
  * )
  */
 class ClassRoom

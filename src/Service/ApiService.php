@@ -44,4 +44,62 @@ class ApiService
             return false;
         }
     }
+
+    /**
+     * @param $id
+     * @return bool|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getClass($id)
+    {
+        try {
+            $response = $this->guzzle->request("GET", "/api/class_rooms/{$id}");
+
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * @param $id
+     * @return bool|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function removeClass($id)
+    {
+        try {
+            $response = $this->guzzle->request("DELETE", "/api/class_rooms/{$id}");
+
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * @param $id
+     * @param $active
+     * @return bool|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function changeClassRoomActive($id, $active)
+    {
+        try {
+            $response = $this->guzzle->request("PATCH", "/api/change-active/{$id}", [
+                "body" => json_encode(compact('active')),
+                "headers" => ["Content-Type" => "application/merge-patch+json"]
+            ]);
+
+            return  json_decode($response->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+    }
 }

@@ -4,7 +4,6 @@
 
 {% block body %}
     <h1>Edit ClassRoom</h1>
-
     {{ include('class_room/_form.html.twig', {'button_label': 'Save'}) }}
     <a href="{{ path('class_room_index') }}">back to list</a>
 {% endblock %}

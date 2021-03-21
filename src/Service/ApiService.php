@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\ClassRoom;
 use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
 
@@ -64,6 +65,28 @@ class ApiService
     }
 
     /**
+     * @return bool|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function createClassRoom($apiSchema)
+    {
+        $headers = [
+            'Content-Type' => 'application/json'
+        ];
+        $body = json_encode($apiSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        try {
+            $response = $this->guzzle->request("POST", "/api/class_rooms", compact('headers', 'body'));
+
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            dd($e);
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
      * @param $id
      * @return bool|mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -81,25 +104,26 @@ class ApiService
         }
     }
 
-    /**
-     * @param $id
-     * @param $active
-     * @return bool|mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function changeClassRoomActive($id, $active)
-    {
-        try {
-            $response = $this->guzzle->request("PATCH", "/api/change-active/{$id}", [
-                "body" => json_encode(compact('active')),
-                "headers" => ["Content-Type" => "application/merge-patch+json"]
-            ]);
-
-            return  json_decode($response->getBody()->getContents(), true);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-
-            return false;
-        }
-    }
+//    /**
+//     * @param $id
+//     * @param $active
+//     * @return bool|mixed
+//     * @throws \GuzzleHttp\Exception\GuzzleException
+//     */
+//    public function changeClassRoomActive($id, $active)
+//    {
+//        $headers = ["Content-Type" => "application/merge-patch+json"];
+//        $body = json_encode($active, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+//
+//        try {
+//            $response = $this->guzzle->request("PATCH", "/api/class_rooms/{$id}", compact('headers', 'body'));
+//
+//            return  json_decode($response->getBody()->getContents(), true);
+//        } catch (\Exception $e) {
+//            dd($e);
+//            $this->logger->error($e->getMessage());
+//
+//            return false;
+//        }
+//    }
 }

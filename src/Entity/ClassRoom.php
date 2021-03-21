@@ -9,10 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=ClassRoomRepository::class)
- * @ApiResource(
- *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "patch", "delete"}
- * )
+ * @ApiResource()
  */
 class ClassRoom
 {
@@ -63,19 +60,12 @@ class ClassRoom
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCreated()
+    public function getCreated(): ?\DateTimeInterface
     {
         return $this->created;
     }
 
-    /**
-     * @param mixed $created
-     * @return ClassRoom
-     */
-    public function setCreated($created)
+    public function setCreated(\DateTimeInterface $created): self
     {
         $this->created = $created;
 
@@ -99,5 +89,17 @@ class ClassRoom
         $this->active = $active;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getApiSchema()
+    {
+        return [
+            'class' => $this->getClass(),
+            'created' => $this->getCreated()->format('Y-m-d H:i:s'),
+            'active' => $this->getActive(),
+        ];
     }
 }

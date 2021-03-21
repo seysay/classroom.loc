@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ClassRoom;
 use App\Form\ActiveType;
 use App\Form\ClassRoomType;
+use App\Manager\ActiveManager;
 use App\Service\ApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,62 +29,57 @@ class ClassRoomController extends AbstractController
         ]);
     }
 
+//    /**
+//     * @Route("/change-active/{id}", name="class_room_change_active")
+//     * @param int $id
+//     * @param Request $request
+//     * @return Response
+//     * @throws \GuzzleHttp\Exception\GuzzleException
+//     */
+//    public function changeActive(
+//        Request $request,
+//        ApiService $service,
+//        $id
+//    )
+//    {
+//        $class = $service->getClass($id);
+//        $form = $this->createForm(ActiveType::class, $class);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $result = $service->changeClassRoomActive($id, $active = $form->getData()["active"]);
+////            $classApi = $form->getData()["class"];
+////            $createdApi = $form->getData()["created"];
+//
+//            return $this->redirectToRoute('class_room_index');
+//        }
+//
+//        return $this->render("class_room/change_active.html.twig", [
+//            "form" => $form->createView()
+//        ]);
+//    }
+
     /**
-     * @Route("/change-active/{id}", name="class_room_change_active")
-     * @param int $id
+     * @Route("/new", name="class_room_new")
      * @param Request $request
-     * @param ApiService $service
+     * @param ApiService $apiService
      * @return Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function changeActive(
-        Request $request,
-        ApiService $service,
-        $id
-    )
+    public function new(Request $request, ApiService $apiService)
     {
-        $class = $service->getClass($id);
-        $form = $this->createForm(ActiveType::class, $class);
+        $entity = new ClassRoom();
+        $form = $this->createForm(ClassRoomType::class, $entity);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $result = $service->changeClassRoomActive($id, $active = $form->getData()["active"]);
-            dd($result);
-
-//            return $this->redirectToRoute('class_room_index');
-            return new Response(
-                $result ? $commenter->comment($id, $active, $this->getUser()) : "",
-                $result ? Response::HTTP_OK : Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-
-        return $this->render("class_room/change_active.html.twig", [
-            "form" => $form->createView()
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="class_room_new", methods={"GET","POST"})
-     * @param Request $request
-     * @return Response
-     */
-    public function new(Request $request): Response
-    {
-        $classRoom = new ClassRoom();
-        $form = $this->createForm(ClassRoomType::class, $classRoom);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($classRoom);
-            $entityManager->flush();
+            $apiService->createClassRoom($entity->getApiSchema());
 
             return $this->redirectToRoute('class_room_index');
+
         }
 
         return $this->render('class_room/new.html.twig', [
-            'class_room' => $classRoom,
             'form' => $form->createView(),
         ]);
     }
@@ -93,6 +89,7 @@ class ClassRoomController extends AbstractController
      * @param ApiService $apiService
      * @param $id
      * @return Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function show(ApiService $apiService, $id): Response
     {

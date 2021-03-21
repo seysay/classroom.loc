@@ -23,6 +23,7 @@ class ActiveType extends AbstractType
         $builder
             ->add('active', CheckboxType::class, [
                 'label' => 'active',
+                'required' => false
             ])
         ;
     }

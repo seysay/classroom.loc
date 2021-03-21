@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ClassRoom;
 use App\Form\ClassRoomType;
 use App\Repository\ClassRoomRepository;
+use App\Service\ApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,12 @@ class ClassRoomController extends AbstractController
     /**
      * @Route("/", name="class_room_index", methods={"GET"})
      */
-    public function index(ClassRoomRepository $classRoomRepository): Response
+    public function index(ApiService $apiService, ClassRoomRepository $classRoomRepository): Response
     {
+        $classRoom = $apiService->getAllClassRoom();
         return $this->render('class_room/index.html.twig', [
             'class_rooms' => $classRoomRepository->findAll(),
+            'class' => $classRoom
         ]);
     }
 

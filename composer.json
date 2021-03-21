@@ -14,8 +14,10 @@
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.8",
+        "eightpoints/guzzle-bundle": "^8.2",
         "fakerphp/faker": "^1.13",
         "gedmo/doctrine-extensions": "^3.0",
+        "guzzlehttp/guzzle": "^7.2",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.2.*",
@@ -96,7 +98,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "5.2.*"
         }
     }

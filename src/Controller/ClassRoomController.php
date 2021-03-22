@@ -7,6 +7,7 @@ use App\Form\ActiveType;
 use App\Form\ClassRoomType;
 use App\Manager\ActiveManager;
 use App\Service\ApiService;
+use App\Service\ClassRoomActive;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,35 +30,34 @@ class ClassRoomController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/change-active/{id}", name="class_room_change_active")
-//     * @param int $id
-//     * @param Request $request
-//     * @return Response
-//     * @throws \GuzzleHttp\Exception\GuzzleException
-//     */
-//    public function changeActive(
-//        Request $request,
-//        ApiService $service,
-//        $id
-//    )
-//    {
-//        $class = $service->getClass($id);
-//        $form = $this->createForm(ActiveType::class, $class);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $result = $service->changeClassRoomActive($id, $active = $form->getData()["active"]);
-////            $classApi = $form->getData()["class"];
-////            $createdApi = $form->getData()["created"];
-//
-//            return $this->redirectToRoute('class_room_index');
-//        }
-//
-//        return $this->render("class_room/change_active.html.twig", [
-//            "form" => $form->createView()
-//        ]);
-//    }
+    /**
+     * @Route("/change-active/{id}", name="class_room_change_active")
+     * @param Request $request
+     * @param ApiService $service
+     * @param $id
+     * @return Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function changeActive(
+        Request $request,
+        ApiService $service,
+        $id
+    )
+    {
+        $entity = $service->getClass($id);
+        $form = $this->createForm(ActiveType::class, $entity);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $service->changeClassRoomActive($id, $active = $form->getData()["active"]);
+
+            return $this->redirectToRoute('class_room_index');
+        }
+
+        return $this->render("class_room/change_active.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
 
     /**
      * @Route("/new", name="class_room_new")

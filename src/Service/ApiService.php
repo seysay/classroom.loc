@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\ClassRoom;
+use App\Repository\ClassRoomRepository;
 use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
 
@@ -18,15 +19,20 @@ class ApiService
     /** @var LoggerInterface */
     private $logger;
 
+    /** @var ClassRoomRepository */
+    private $repository;
+
     /**
      * ApiService constructor.
      * @param ClientInterface $guzzle
      * @param LoggerInterface $logger
+     * @param ClassRoomRepository $repository
      */
-    public function __construct(ClientInterface $guzzle, LoggerInterface $logger)
+    public function __construct(ClientInterface $guzzle, LoggerInterface $logger, ClassRoomRepository $repository)
     {
         $this->guzzle = $guzzle;
         $this->logger = $logger;
+        $this->repository = $repository;
     }
 
     /**
@@ -104,26 +110,33 @@ class ApiService
         }
     }
 
-//    /**
-//     * @param $id
-//     * @param $active
-//     * @return bool|mixed
-//     * @throws \GuzzleHttp\Exception\GuzzleException
-//     */
-//    public function changeClassRoomActive($id, $active)
-//    {
-//        $headers = ["Content-Type" => "application/merge-patch+json"];
-//        $body = json_encode($active, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-//
-//        try {
-//            $response = $this->guzzle->request("PATCH", "/api/class_rooms/{$id}", compact('headers', 'body'));
-//
-//            return  json_decode($response->getBody()->getContents(), true);
-//        } catch (\Exception $e) {
-//            dd($e);
-//            $this->logger->error($e->getMessage());
-//
-//            return false;
-//        }
-//    }
+    /**
+     * @param $id
+     * @param $active
+     * @return bool|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function changeClassRoomActive($id, $active)
+    {
+        $entity = $this->repository->findOneById($id);
+        $headers = ["Content-Type" => "application/merge-patch+json"];
+        $activeChange = [
+            "class" => $entity->getClass(),
+            "created" => $entity->getCreated()->format('Y-m-d H:i:s'),
+            "active"=> $active
+        ];
+
+        $body = json_encode($activeChange, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        try {
+            $response = $this->guzzle->request("PATCH", "/api/class_rooms/{$id}", compact('headers', 'body'));
+
+            return  json_decode($response->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            dd($e);
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+    }
 }

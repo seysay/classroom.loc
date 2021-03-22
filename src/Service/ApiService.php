@@ -71,6 +71,7 @@ class ApiService
     }
 
     /**
+     * @param $apiSchema
      * @return bool|mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -82,6 +83,30 @@ class ApiService
         $body = json_encode($apiSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         try {
             $response = $this->guzzle->request("POST", "/api/class_rooms", compact('headers', 'body'));
+
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            dd($e);
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * @param $id
+     * @param $apiSchema
+     * @return bool|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function editClassRoom($id, $apiSchema)
+    {
+        $headers = [
+            'Content-Type' => 'application/json'
+        ];
+        $body = json_encode($apiSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        try {
+            $response = $this->guzzle->request("PUT", "/api/class_rooms/{$id}", compact('headers', 'body'));
 
             return json_decode($response->getBody()->getContents(), true);
         } catch (\Exception $e) {

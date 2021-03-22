@@ -5,9 +5,7 @@ namespace App\Controller;
 use App\Entity\ClassRoom;
 use App\Form\ActiveType;
 use App\Form\ClassRoomType;
-use App\Manager\ActiveManager;
 use App\Service\ApiService;
-use App\Service\ClassRoomActive;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +17,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClassRoomController extends AbstractController
 {
     /**
-     * @Route("/", name="class_room_index", methods={"GET"})
+     * @Route("/", name="class_room_index")
+     * @param ApiService $apiService
+     * @return Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function index(ApiService $apiService): Response
@@ -85,7 +85,7 @@ class ClassRoomController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/show", name="class_room_show", methods={"GET"})
+     * @Route("/{id}/show", name="class_room_show")
      * @param ApiService $apiService
      * @param $id
      * @return Response
@@ -100,18 +100,20 @@ class ClassRoomController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="class_room_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="class_room_edit")
      * @param Request $request
      * @param ClassRoom $classRoom
+     * @param ApiService $apiService
      * @return Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function edit(Request $request, ClassRoom $classRoom): Response
+    public function edit(Request $request, ClassRoom $classRoom, ApiService $apiService)
     {
         $form = $this->createForm(ClassRoomType::class, $classRoom);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $apiService->editClassRoom($classRoom->getId(), $classRoom->getApiSchema());
 
             return $this->redirectToRoute('class_room_index');
         }

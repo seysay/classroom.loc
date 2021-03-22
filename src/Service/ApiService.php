@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\ClassRoom;
 use App\Repository\ClassRoomRepository;
 use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
@@ -41,15 +40,7 @@ class ApiService
      */
     public function getAllClassRoom()
     {
-        try {
-            $response = $this->guzzle->request("GET", "/api/class_rooms");
-
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-
-            return false;
-        }
+        return $this->sendRequest("GET", "/api/class_rooms");
     }
 
     /**
@@ -59,15 +50,7 @@ class ApiService
      */
     public function getClass($id)
     {
-        try {
-            $response = $this->guzzle->request("GET", "/api/class_rooms/{$id}");
-
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-
-            return false;
-        }
+        return $this->sendRequest("GET", "/api/class_rooms/{$id}");
     }
 
     /**
@@ -81,16 +64,8 @@ class ApiService
             'Content-Type' => 'application/json'
         ];
         $body = json_encode($apiSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        try {
-            $response = $this->guzzle->request("POST", "/api/class_rooms", compact('headers', 'body'));
 
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (\Exception $e) {
-            dd($e);
-            $this->logger->error($e->getMessage());
-
-            return false;
-        }
+        return $this->sendRequest("POST", "/api/class_rooms", compact('headers', 'body'));
     }
 
     /**
@@ -105,16 +80,8 @@ class ApiService
             'Content-Type' => 'application/json'
         ];
         $body = json_encode($apiSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        try {
-            $response = $this->guzzle->request("PUT", "/api/class_rooms/{$id}", compact('headers', 'body'));
 
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (\Exception $e) {
-            dd($e);
-            $this->logger->error($e->getMessage());
-
-            return false;
-        }
+        return $this->sendRequest("PUT", "/api/class_rooms/{$id}", compact('headers', 'body'));
     }
 
     /**
@@ -124,15 +91,7 @@ class ApiService
      */
     public function removeClass($id)
     {
-        try {
-            $response = $this->guzzle->request("DELETE", "/api/class_rooms/{$id}");
-
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-
-            return false;
-        }
+        return $this->sendRequest("DELETE", "/api/class_rooms/{$id}");
     }
 
     /**
@@ -153,12 +112,23 @@ class ApiService
 
         $body = json_encode($activeChange, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
+        return $this->sendRequest("PATCH", "/api/class_rooms/{$id}", compact('headers', 'body'));
+    }
+
+    /**
+     * @param $method
+     * @param $uri
+     * @param array $options
+     * @return bool|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function sendRequest($method, $uri, $options = [])
+    {
         try {
-            $response = $this->guzzle->request("PATCH", "/api/class_rooms/{$id}", compact('headers', 'body'));
+            $response = $this->guzzle->request($method, $uri, $options);
 
             return  json_decode($response->getBody()->getContents(), true);
         } catch (\Exception $e) {
-            dd($e);
             $this->logger->error($e->getMessage());
 
             return false;

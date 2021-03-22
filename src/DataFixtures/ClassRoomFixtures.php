@@ -9,7 +9,7 @@ class ClassRoomFixtures extends BaseFixture
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(ClassRoom::class, 10, function (ClassRoom $classRoom) {
+        $this->createMany(ClassRoom::class, 5, function (ClassRoom $classRoom) {
             $classRoom
                 ->setClass($this->faker->word)
                 ->setCreated($this->faker->dateTime)

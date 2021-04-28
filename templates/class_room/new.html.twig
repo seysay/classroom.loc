@@ -3,9 +3,11 @@
 {% block title %}New ClassRoom{% endblock %}
 
 {% block body %}
-    <h1>Create new ClassRoom</h1>
-
-    {{ include('class_room/_form.html.twig') }}
-
-    <a href="{{ path('class_room_index') }}">back to list</a>
+    <div class="container">
+        <h1>Create new ClassRoom</h1>
+        {{ include('class_room/_form.html.twig') }}
+        <hr>
+            <a href="{{ path('class_room_index') }}" class="btn btn-outline-primary"
+               role="button" data-bs-toggle="button">back</a>
+    </div>
 {% endblock %}

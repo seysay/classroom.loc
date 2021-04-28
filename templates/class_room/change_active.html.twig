@@ -3,10 +3,11 @@
 {% block title %}Edit ClassRoom{% endblock %}
 
 {% block body %}
-    <h1>Edit ClassRoom</h1>
-
-    {{ include('class_room/_form.html.twig', {'button_label': 'Save'}) }}
-
-    <a href="{{ path('class_room_index') }}">back to list</a>
-
+    <div class="container">
+        <h1>Edit ClassRoom</h1>
+        {{ include('class_room/_form.html.twig', {'button_label': 'Save'}) }}
+        <hr>
+        <a href="{{ path('class_room_index') }}" class="btn btn-outline-primary"
+           role="button" data-bs-toggle="button">back</a>
+    </div>
 {% endblock %}

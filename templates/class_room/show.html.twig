@@ -3,31 +3,33 @@
 {% block title %}ClassRoom{% endblock %}
 
 {% block body %}
-    <h1>ClassRoom</h1>
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ class.id }}</td>
-        </tr>
-        <tr>
-            <th>Class</th>
-            <td>{{ class.class }}</td>
-        </tr>
-        <tr>
-            <th>Created</th>
-            <td>{{ class.created ? class.created|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        <tr>
-            <th>Active</th>
-            <td>{{ class.active ? 'Yes' : 'No' }}</td>
-        </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('class_room_index') }}">back to list</a>
-
-    <a href="{{ path('class_room_edit', {'id': class.id}) }}">edit</a>
-    <a href="{{ path('class_room_delete', {'id': class.id}) }}">DELETE</a>
-
+    <div class="container">
+        <h1>ClassRoom</h1>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ class.id }}</td>
+            </tr>
+            <tr>
+                <th>Class</th>
+                <td>{{ class.class }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ class.created ? class.created|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Active</th>
+                <td>{{ class.active ? 'Yes' : 'No' }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <a href="{{ path('class_room_index') }}" class="btn btn-outline-primary"
+           role="button" data-bs-toggle="button">back</a>
+        <a href="{{ path('class_room_edit', {'id': class.id}) }}" class="btn btn-outline-secondary"
+           role="button" data-bs-toggle="button">edit</a>
+        <a href="{{ path('class_room_delete', {'id': class.id}) }}"
+           class="btn btn-outline-danger" role="button" data-bs-toggle="button">delete</a>
+    </div>
 {% endblock %}

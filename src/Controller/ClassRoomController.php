@@ -12,7 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/class/room")
+ * Class ClassRoomController
+ * @package App\Controller
  */
 class ClassRoomController extends AbstractController
 {

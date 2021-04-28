@@ -1,12 +1,13 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}ClassRoom index{% endblock %}
-
 {% block body %}
-    <h1>ClassRoom index</h1>
-
-    <table class="table">
-        <thead>
+    <div class="container">
+        <h1>ClassRoom index</h1>
+        <hr>
+        <a href="{{ path('class_room_new') }}" class="btn btn-outline-info" role="button" data-bs-toggle="button">сreate_new</a>
+        <hr>
+        <table class="table table-striped">
+            <thead>
             <tr>
                 <th>Id</th>
                 <th>Class</th>
@@ -14,27 +15,29 @@
                 <th>Active</th>
                 <th>actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for classRoom in class['hydra:member'] %}
-            <tr>
-                <td>{{ classRoom.id }}</td>
-                <td>{{ classRoom.class }}</td>
-                <td>{{ classRoom.created ? classRoom.created|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ classRoom.active ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('class_room_show', {'id': classRoom.id}) }}">show</a>
-                    <a href="{{ path('class_room_edit', {'id': classRoom.id}) }}">edit</a>
-                    <a href="{{ path('class_room_change_active', {'id': classRoom.id}) }}">change_active</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('class_room_new') }}">Create new</a>
+            </thead>
+            <tbody>
+            {% for classRoom in class['hydra:member'] %}
+                <tr>
+                    <td>{{ classRoom.id }}</td>
+                    <td>{{ classRoom.class }}</td>
+                    <td>{{ classRoom.created ? classRoom.created|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ classRoom.active ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <a href="{{ path('class_room_show', {'id': classRoom.id}) }}" class="btn btn-outline-primary"
+                           role="button" data-bs-toggle="button">show</a>
+                        <a href="{{ path('class_room_edit', {'id': classRoom.id}) }}" class="btn btn-outline-secondary"
+                           role="button" data-bs-toggle="button">edit</a>
+                        <a href="{{ path('class_room_change_active', {'id': classRoom.id}) }}"
+                           class="btn btn-outline-success" role="button" data-bs-toggle="button">change_active</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

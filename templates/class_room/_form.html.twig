@@ -1,4 +1,7 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_errors(form) }}
+<div class="form-outline mb-4">
+    <label class="form-label" for="classRoom"> {{ form_rest(form) }}</label>
+</div>
 {{ form_end(form) }}
+<button type="submit" class="btn btn-primary btn-block">{{ button_label|default('Save') }}</button>
